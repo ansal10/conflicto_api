@@ -6,7 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status
 from rest_framework.views import APIView
 
-from conflicto.api.v1.serializers.user_serializers import UserSerializer
+from conflicto.api.v1.serializers.user_serializer import UserSerializer
 
 
 class UserView(APIView):

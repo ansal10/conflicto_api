@@ -17,6 +17,12 @@ class TestPostApis(TestCase):
             "title": "My Title",
             "description": "Detailed Description"
         }
+        self.data2 = {
+            "title": "My Title",
+            "description": "Detailed Description",
+            "likes": 12,
+            "dislikes": 11
+        }
 
     def tearDown(self):
         pass
@@ -59,3 +65,9 @@ class TestPostApis(TestCase):
         self.assertIn('reaction', data[0])
         self.assertEqual(data[0]['reaction'].__len__(), 2)
         self.assertEqual(data[1]['reaction'].__len__(), 2)
+
+    def test_post_creation_with_readonly_fields(self):
+        status_code, data = self.post_api(self.data2)
+        self.assertEqual(status_code, 200)
+        self.assertEqual(data['likes'], 0)
+        self.assertEqual(Post.objects.get(uuid=data['uuid']).likes, 0)
