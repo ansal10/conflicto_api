@@ -5,11 +5,6 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db import transaction
 from django.http import Http404, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from rest_framework import generics
-from rest_framework.generics import GenericAPIView
-from rest_framework.mixins import ListModelMixin, CreateModelMixin
-from rest_framework.pagination import PageNumberPagination
-from rest_framework.response import Response
 from rest_framework.status import HTTP_400_BAD_REQUEST
 from rest_framework.views import APIView
 

@@ -1,4 +1,4 @@
-from rest_framework.serializers import ModelSerializer, ListSerializer
+from rest_framework.serializers import ModelSerializer
 
 from conflicto.models import Post
 

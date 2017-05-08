@@ -1,10 +1,8 @@
 from django.http.response import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from rest_framework.status import HTTP_400_BAD_REQUEST
 from rest_framework.views import APIView
 
 from conflicto.api.v1.controllers.post_view import PostView
-from conflicto.api.v1.serializers.reaction_serializer import ReactionSerializer
 from conflicto.models import Reaction
 
 
