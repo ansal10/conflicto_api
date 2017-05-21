@@ -14,7 +14,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
 class FBProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = FBProfile
-        fields = ['first_name', 'last_name', 'fb_link']
+        fields = ['first_name', 'last_name', 'fb_link', 'name', 'dp_link']
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -44,3 +44,12 @@ class UserSerializer(serializers.ModelSerializer):
                                                                              instance.userprofile.firebase_id)
         instance.userprofile.save()
         return instance
+
+
+class UserPostSerializer(serializers.ModelSerializer):
+
+    fbprofile = FBProfileSerializer(required=False)
+
+    class Meta:
+        model = User
+        fields = ['fbprofile']

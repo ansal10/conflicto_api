@@ -34,6 +34,8 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     fcm_token = models.CharField(max_length=255, null=True)
     firebase_id = models.CharField(max_length=255, null=False)
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
 
 
 class FBProfile(models.Model):
@@ -43,7 +45,11 @@ class FBProfile(models.Model):
     last_name = models.CharField(max_length=255, null=True)
     fb_link = models.CharField(max_length=255, null=True)
     name = models.CharField(max_length=255, null=True)
-
+    dp_link = models.CharField(max_length=255, null=True)
+    cover_link = models.CharField(max_length=255, null=True)
+    gender = models.CharField(max_length=10, null=True)
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
 
 class Post(models.Model):
     uuid = models.CharField(max_length=63, null=False, default=generate_uuid, db_index=True, unique=True)
@@ -52,7 +58,8 @@ class Post(models.Model):
     category = models.CharField(max_length=255, null=True, db_index=True)
     tags = JSONField(default=[])
     shared_post = models.BooleanField(default=False)
-
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
 
     # counts of likes/dislikes/supporters
     reports = models.IntegerField(default=0)
@@ -64,6 +71,7 @@ class Post(models.Model):
 
     #foreign key
     user = models.ForeignKey(User, null=False, db_index=True)
+
 
 
 
@@ -79,6 +87,8 @@ class Comment(models.Model):
     post_uuid = models.CharField(max_length=63, null=False)
     comment = models.TextField(null=False)
     type = models.CharField(max_length=255, choices=ACTIONS_CHOICES)
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
 
     # counts of like and dislikes...
     reports = models.IntegerField(default=0)
@@ -109,25 +119,24 @@ class Reaction(models.Model):
 
     object_uuid = models.CharField(max_length=63, null=False, db_index=True)
     user = models.ForeignKey(User, null=False, db_index=True)
-    action = models.CharField(max_length=255, null=False, choices=ACTIONS_CHOICES, db_index=True)
+    actions = JSONField(max_length=255, null=False, default=[])
     object_type = models.CharField(max_length=255, null=False, choices=OBJECT_TYPE_CHOICES, db_index=True)
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
 
     class Meta:
-        # unique_together = ('object_uuid', 'action', 'object_type', 'user_id')
         indexes = [
-            models.Index(fields=['object_uuid', 'action', 'object_type', 'user_id'])
+            models.Index(fields=['object_uuid', 'object_type', 'user_id'])
         ]
 
     @staticmethod
     def user_reactions(user_id, object_uuids, object_type):
         uuids = object_uuids if hasattr(object_uuids, '__iter__') else [object_uuids]
-        reactions = Reaction.objects.values('action', 'object_uuid').filter(user_id=user_id, object_uuid__in=uuids, object_type=object_type)
+        reactions = Reaction.objects.values('actions', 'object_uuid').filter(user_id=user_id, object_uuid__in=uuids, object_type=object_type)
 
         reaction_dict = {}
         for reaction in reactions:
-            actions = reaction_dict.get(reaction['object_uuid'], [])
-            actions.append(reaction['action'])
-            reaction_dict[reaction['object_uuid']] = actions
+            reaction_dict[reaction['object_uuid']] = reaction['actions']
 
         if hasattr(object_uuids, '__iter__'):
             return reaction_dict
