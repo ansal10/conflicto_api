@@ -11,5 +11,5 @@ urlpatterns = [
     url(r'^post/(?P<post_uuid>[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})$', PostView.as_view()),
     url(r'^comment$', CommentView.as_view()),
     url(r'^reaction$', ReactionView.as_view()),
-    url(r'^comment/(?P<post_uuid>[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})$', CommentView.as_view()),
+    url(r'^comment/(?P<uuid>[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})$', CommentView.as_view()),
 ]

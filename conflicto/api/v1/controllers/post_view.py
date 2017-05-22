@@ -90,7 +90,7 @@ class PostView(APIView):
 
             if action == "LIKE":
                 post.likes = post.likes + count
-            elif action == "DISIKE":
+            elif action == "DISLIKE":
                 post.dislikes = post.dislikes + count
             elif action == "REPORT":
                 post.reports = post.reports + count
