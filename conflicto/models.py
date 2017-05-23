@@ -39,6 +39,7 @@ class UserProfile(models.Model):
 
 
 class FBProfile(models.Model):
+    uuid = models.CharField(max_length=63, null=False, default=generate_uuid, db_index=True, unique=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     token = models.CharField(max_length=255, null=True)
     first_name = models.CharField(max_length=255, null=True)

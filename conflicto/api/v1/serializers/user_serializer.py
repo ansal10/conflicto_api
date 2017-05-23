@@ -14,7 +14,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
 class FBProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = FBProfile
-        fields = ['first_name', 'last_name', 'fb_link', 'name', 'dp_link']
+        fields = ['first_name', 'last_name', 'fb_link', 'name', 'dp_link', 'uuid']
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -34,7 +34,7 @@ class UserSerializer(serializers.ModelSerializer):
                                                           firebase_id=validated_data['userprofile']['firebase_id'],
                                                           user=user)
             user.fbprofile = FBProfile.objects.create(token=validated_data.get('fbprofile',{}).get('fb_token', None),
-                                                      user=user)
+                                                      user=user, uuid=user.userprofile.uuid)
             # TODO: Populate data from fb api
             return user
 
