@@ -26,7 +26,7 @@ SECRET_KEY = 'y5@)3nsolx_i05$$+rwwn*@-rw%bwjzb*dw-6b&qog^_s8!(q3'
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-
+from config import *
 
 # Application definition
 
@@ -49,6 +49,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'conflicto.middleware.logger_middleware.LoggerMiddleWare',
 ]
 
 ROOT_URLCONF = 'conflicto_api.urls'
@@ -74,16 +75,6 @@ WSGI_APPLICATION = 'conflicto_api.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'conflicto',
-        'HOST': 'localhost',
-        'PORT': '5432',
-        'USERNAME': 'ansal'
-    }
-}
 
 
 # Password validation

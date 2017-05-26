@@ -10,7 +10,9 @@ from rest_framework.views import APIView
 
 from conflicto.api.v1.serializers.post_serializer import PostSerializer
 from conflicto.models import Post, Reaction, Objects
+
 ACTIONS = ['LIKE', 'DISLIKE', 'REPORT', 'ENDORSE']
+
 
 class PostView(APIView):
     def authenticate(self, request):
@@ -45,7 +47,6 @@ class PostView(APIView):
         else:
             post = Post.objects.get(uuid=post_uuid)
 
-
     @csrf_exempt
     def post(self, request):
         user = self.authenticate(request)
@@ -60,7 +61,6 @@ class PostView(APIView):
         else:
             return JsonResponse(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
-
     def put(self, request, post_uuid):
         user = self.authenticate(request)
         data = request.data
@@ -68,8 +68,12 @@ class PostView(APIView):
         if data.get("action", None) and data.get('action').upper() in ACTIONS:
             self.update_action(data.get("action").upper(), post_uuid, user)
             return JsonResponse({"status": "ok"})
+        elif data.get("title", None):
+            post = Post.objects.get(uuid=post_uuid)
+            post.title = data.get('title')
+            post.description = data.get('description')
+            return JsonResponse({"status": "ok"})
         return JsonResponse({}, status=HTTP_400_BAD_REQUEST)
-
 
     def update_action(self, action, post_uuid, user):
         post = Post.objects.filter(uuid=post_uuid).first()
@@ -99,11 +103,10 @@ class PostView(APIView):
 
             post.save()
 
-
     def add_reactions(self, data):
         uuids = [x['uuid'] for x in data]
         reactions = Reaction.user_reactions(self.user.id, uuids, Objects.POST)
         for d in data:
             d['reactions'] = reactions.get(d['uuid'], [])
-        return data
 
+        return data
