@@ -9,7 +9,7 @@ class PostSerializer(ModelSerializer):
     user = UserPostSerializer(required=False)
     class Meta:
         model = Post
-        fields = ['id', 'title', 'description', 'category', 'shared_post', 'uuid', 'tags', 'likes', 'dislikes', 'endorse', 'supports', 'conflicts', 'reports', 'user']
-        read_only_fields = ['id', 'uuid', 'tags', 'likes', 'dislikes', 'endorse', 'supports', 'conflicts', 'reports']
+        fields = ['id', 'title', 'description', 'category', 'shared_post', 'uuid', 'tags', 'likes', 'dislikes', 'endorse', 'supports', 'conflicts', 'reports', 'user', 'created_on']
+        read_only_fields = ['id', 'uuid', 'tags', 'likes', 'dislikes', 'endorse', 'supports', 'conflicts', 'reports', 'created_on']
 
 

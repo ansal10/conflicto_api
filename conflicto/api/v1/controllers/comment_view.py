@@ -64,7 +64,7 @@ class CommentView(APIView):
 
     def get(self, request, uuid):
         self.user_and_post_authentication(request, uuid)
-        queryset = Comment.objects.filter(post_uuid=uuid).order_by('id')
+        queryset = Comment.objects.filter(post_uuid=uuid).order_by('-id')
         paginator = Paginator(queryset, 25)
         page = request.GET.get('page')
         try:
@@ -96,7 +96,15 @@ class CommentView(APIView):
 
     def delete(self, request, uuid):
         self.user_and_comment_authentication(request, uuid)
-        self.comment.delete()
+        post = self.comment.post
+        with transaction.atomic():
+            if self.comment.type == Actions.CONFLICT:
+                post.conflicts -= 1
+            elif self.comment.type == Actions.SUPPORT:
+                post.supports -=1
+            post.save()
+            self.comment.delete()
+
         return JsonResponse({"status": "ok"})
 
     def add_reactions(self, data):

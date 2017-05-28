@@ -29,7 +29,7 @@ class PostView(APIView):
     def get(self, request, post_uuid=None):
         user = self.authenticate(request)
         if post_uuid is None:  # list post
-            queryset = Post.objects.all().order_by('id')
+            queryset = Post.objects.all().order_by('-id')
             paginator = Paginator(queryset, 25)
             page = request.GET.get('page')
             try:
